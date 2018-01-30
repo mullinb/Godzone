@@ -1,8 +1,66 @@
 const express = require('express');
 const app = express();
 const compression = require('compression');
+const cookieSession = require("cookie-session");
+const user = require("./models/user");
+const bodyParser = require('body-parser');
+const config = require('./config');
+let spicedPg = require('spiced-pg');
+var multer = require('multer');
+var uidSafe = require('uid-safe');
+var path = require('path');
+const fs = require('fs');
+
+
+let dbUrl = process.env.DATABASE_URL || `postgres:${require('./secrets').dbUser}@localhost:5432/imageboard`;
+
+let db = spicedPg(dbUrl);
+
+app.use(cookieSession({
+    secret: 'a really hard to guess secret',
+    maxAge: 1000 * 60 * 60 * 24 * 14
+}));
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+
+app.use(bodyParser.json({
+    extended: false
+}));
 
 app.use(compression());
+
+const knox = require('knox');
+let secrets;
+if (process.env.NODE_ENV == 'production') {
+    secrets = process.env; // in prod the secrets are environment variables
+} else {
+    secrets = require('./secrets'); // secrets.json is in .gitignore
+}
+const client = knox.createClient({
+    key: process.env.AWS_KEY || secrets.AWS_KEY,
+    secret: process.env.AWS_SECRET || secrets.AWS_SECRET,
+    bucket: 'fluxlymoppings'
+});
+
+var diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + '/uploads');
+    },
+    filename: function (req, file, callback) {
+      uidSafe(24).then(function(uid) {
+          callback(null, uid + path.extname(file.originalname));
+      });
+    }
+});
+
+var uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 12097152
+    }
+});
 
 if (process.env.NODE_ENV != 'production') {
     app.use(
@@ -15,9 +73,116 @@ if (process.env.NODE_ENV != 'production') {
     app.use('/bundle.js', (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
+app.get('/user', (req, res) => {
+    if (req.session.user) {
+        user.profile(req.session.user.id)
+        .then((results) => {
+            res.json({
+                success: true,
+                userInfo: {
+                    id: results.rows[0].id,
+                    name: results.rows[0].first + " " + results.rows[0].last,
+                    pic: results.rows[0].picUrl
+                }
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    } else {}
+})
+
+app.get('/welcome', (req, res) => {
+    console.log(req.session.user)
+    if (req.session.user) {
+        res.redirect('/');
+    } else {
+        res.sendFile(__dirname + '/index.html');
+    }
+})
+
 app.get('*', function(req, res) {
+    console.log(req.session.user)
+    if(!req.session.user) {
+        res.redirect('/welcome');
+    } else {
     res.sendFile(__dirname + '/index.html');
+    }
 });
+
+
+app.post('/login', (req, res) => {
+    console.log(req.body);
+    user.login(req.body)
+    .then((results) => {
+        req.session.user = {
+            id: results.rows[0].id
+        }
+        if (results) {
+            res.json({
+                success: true,
+                results: results.rows[0]
+            })
+        }
+        else {}
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+})
+
+app.post('/register', user.checkRegister, (req, res) => {
+    user.register(req.body)
+    .then((results) => {
+        if (results) {
+            req.session.user = {
+                id: results.rows[0].id
+            }
+            res.json({
+                success: true,
+                results: results.rows[0]
+            })
+        }
+        else {}
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+})
+
+app.post('/PPupload', uploader.single('file'), function(req, res) {
+    console.log(req.session);
+    console.log(req.file.filename);
+    var userid = req.session.user.id;
+
+    if (req.file) {
+        let s3Request = client.put("/pics/" + req.file.filename, {
+            'Content-Type': req.file.mimetype,
+            'Content-Length': req.file.size,
+            'x-amz-acl': 'public-read'
+        });
+
+        let readStream = fs.createReadStream(req.file.path);
+        readStream.pipe(s3Request);
+        s3Request.on('response', s3Response => {
+            let success = s3Response.statusCode == 200;
+            db.query(
+                `INSERT INTO users(pic_url) VALUES($1) WHERE users.id=$2`, [req.file.filename, userid])
+                .then((results) => {
+                    console.log(results.rows)
+                    let imgUrl = config.s3Url.concat(results.rows[0].image);
+                    res.json({
+                        success: true,
+                        imgUrl: imgUrl
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        })
+    }
+});
+
 
 app.listen(8080, function() {
     console.log("I'm listening.");
