@@ -36,6 +36,16 @@ const conf = {
                         'transform-object-rest-spread'
                     ]
                 }
+            },
+            {
+                test: /\.css$/,
+                loader: 'style-loader'
+            }, {
+                test: /\.css$/,
+                loader: 'css-loader',
+                query: {
+                    modules: true
+                }
             }
         ]
     }

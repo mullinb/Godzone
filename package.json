@@ -9,7 +9,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "engines": {
-        "node": "8.2.1"
+        "node": "8.9.1"
     },
     "dependencies": {
         "axios": "^0.15.3",
@@ -24,9 +24,11 @@
         "babel-preset-react": "^6.16.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.15.2",
+        "classnames": "^2.2.5",
         "compression": "^1.7.0",
         "cookie-parser": "^1.4.3",
         "cookie-session": "^2.0.0-alpha.2",
+        "css-loader": "^0.28.9",
         "csurf": "^1.9.0",
         "express": "^4.14.0",
         "http-proxy-middleware": "^0.17.4",
@@ -43,6 +45,7 @@
         "socket-cookie-session": "github:spicedacademy/socket-cookie-session",
         "socket.io": "^2.0.3",
         "spiced-pg": "spicedacademy/spiced-pg",
+        "style-loader": "^0.20.1",
         "uid-safe": "^2.1.4",
         "webpack": "^1.14.0",
         "webpack-dev-middleware": "^1.8.4"
