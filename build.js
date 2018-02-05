@@ -33,6 +33,16 @@ const conf = {
                     presets: [['es2015'], ['react']],
                     plugins: ['transform-async-to-generator']
                 }
+            },
+            {
+                test: /\.css$/,
+                loader: 'style-loader'
+            }, {
+                test: /\.css$/,
+                loader: 'css-loader',
+                query: {
+                    modules: true
+                }
             }
         ]
     }

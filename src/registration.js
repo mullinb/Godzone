@@ -32,7 +32,7 @@ export default class Registration extends React.Component {
         .then(({data}) => {
             console.log(data.success);
             if (data.success) {
-                location.replace('#/app');
+                location.replace('/');
             } else {
                 this.setState({
                     error: true

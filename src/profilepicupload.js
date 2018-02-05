@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import styles from "../stylesheets/stylesheet.css";
+
 
 
 export default class ProfilePicUpload extends React.Component {
@@ -19,7 +21,6 @@ export default class ProfilePicUpload extends React.Component {
         formData.append('file', this.fileInput.files[0])
         axios.post("/PPUpload", formData)
         .then(({data}) => {
-            console.log(data);
             if (data.success) {
                 this.props.displayNewPP(data.imgUrl)
             }

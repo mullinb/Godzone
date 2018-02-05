@@ -12,7 +12,7 @@ var path = require('path');
 const fs = require('fs');
 
 
-let dbUrl = process.env.DATABASE_URL || `postgres:${require('./secrets').dbUser}@localhost:5432/imageboard`;
+let dbUrl = process.env.DATABASE_URL || `postgres:${require('./secrets').dbUser}@localhost:5432/network`;
 
 let db = spicedPg(dbUrl);
 
@@ -73,16 +73,31 @@ if (process.env.NODE_ENV != 'production') {
     app.use('/bundle.js', (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
+app.use(express.static('./public'));
+
+app.get('/logout', (req, res) => {
+    req.session = null;
+    res.json({
+        success: true
+    })
+})
+
 app.get('/user', (req, res) => {
     if (req.session.user) {
         user.profile(req.session.user.id)
         .then((results) => {
+            if (results.rows[0].pic_url) {
+                var imgUrl = config.s3Url.concat(results.rows[0].pic_url);
+            }
+            console.log()
             res.json({
                 success: true,
                 userInfo: {
                     id: results.rows[0].id,
-                    name: results.rows[0].first + " " + results.rows[0].last,
-                    pic: results.rows[0].picUrl
+                    first: results.rows[0].first,
+                    last: results.rows[0].last,
+                    bio: results.rows[0].bio,
+                    picUrl: imgUrl
                 }
             })
         })
@@ -151,8 +166,6 @@ app.post('/register', user.checkRegister, (req, res) => {
 })
 
 app.post('/PPupload', uploader.single('file'), function(req, res) {
-    console.log(req.session);
-    console.log(req.file.filename);
     var userid = req.session.user.id;
 
     if (req.file) {
@@ -167,10 +180,9 @@ app.post('/PPupload', uploader.single('file'), function(req, res) {
         s3Request.on('response', s3Response => {
             let success = s3Response.statusCode == 200;
             db.query(
-                `INSERT INTO users(pic_url) VALUES($1) WHERE users.id=$2`, [req.file.filename, userid])
+                `UPDATE users SET pic_url = $1 WHERE id = $2 RETURNING *`, [req.file.filename, userid])
                 .then((results) => {
-                    console.log(results.rows)
-                    let imgUrl = config.s3Url.concat(results.rows[0].image);
+                    let imgUrl = config.s3Url.concat(results.rows[0].pic_url);
                     res.json({
                         success: true,
                         imgUrl: imgUrl

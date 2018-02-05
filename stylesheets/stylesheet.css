@@ -1,0 +1,22 @@
+* {
+    background-color: red;
+}
+
+.profile {
+    height: 300px;
+    width: 300px;
+}
+
+.pp {
+    background-color: green;
+}
+
+.link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.footer {
+    border: black 2px solid;
+}

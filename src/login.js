@@ -31,7 +31,7 @@ export default class Login extends React.Component {
         .then(({data}) => {
             console.log(data.success);
             if (data.success) {
-                location.replace('#/app');
+                location.replace('/');
             } else {
                 this.setState({
                     error: true
@@ -48,7 +48,7 @@ export default class Login extends React.Component {
                     <ul>
                         <input type="text" value={this.state.email} onChange={this.handleInputChange} name="email" placeholder="Email" />
                         <input type="text" value={this.state.pass} onChange={this.handleInputChange} name="pass" placeholder="Password" />
-                        <input type="submit" value="Complete ascension" />
+                        <input type="button" value="Complete ascension" onClick={this.handleSubmit} />
                     </ul>
                     <h3> If not, enfeeble yourself, before attempting <Link to="/">new godliness</Link></h3>
                 </form>
