@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
+import axios from './axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styles from "../stylesheets/stylesheet.css";

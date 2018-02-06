@@ -1,14 +1,15 @@
 import React from 'react';
-import axios from 'axios';
+import axios from './axios';
 
 export default class Bio extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             updating: false,
-            bio: this.props.bio
+            bio: ''
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.showUpdater = this.showUpdater.bind(this);
     }
     showUpdater(e) {
@@ -17,19 +18,35 @@ export default class Bio extends React.Component {
             updating: true
         })
     }
+    handleChange(event) {
+        this.setState({bio: event.target.value});
+    }
     handleSubmit() {
-        axios.post("/BioUpload", this.state.bio)
+        axios.post("/BioUpload", {
+            bio: this.state.bio
+        })
         .then(({data}) => {
             if (data.success) {
-                this.props.displayNewPP(data.imgUrl)
+                this.props.updateBio(data.newBio)
             }
+            this.setState({
+                updating: false
+            })
         })
         .catch((err) => {
             console.log(err);
         })
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user.bio.length > 0) {
+            this.setState({
+                bio: nextProps.user.bio
+            })
+        }
+    }
     render() {
         if (this.state.updating === false) {
+            console.log(this.props.user)
             return(
                 <div>
                     <h2>GodStory</h2>
@@ -45,7 +62,10 @@ export default class Bio extends React.Component {
             return (
                 <div>
                     <h2>Edit thy GodStory, holiest of scriptures</h2>
-                <textarea/>
+                <textarea value={this.state.bio} onChange={this.handleChange} />
+                <button type="submit" onClick={this.handleSubmit}>
+                    Consecrate
+                </button>
                 </div>
             )
         }

@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from './axios';
+import ProfilePic from './profilepic';
+import ProfilePicUpload from './profilepicupload';
+import Bio from './bio';
+
 
 
 export default class SelfProfile extends React.Component {
@@ -23,6 +27,7 @@ export default class SelfProfile extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.showUploader = this.showUploader.bind(this);
         this.displayNewPP = this.displayNewPP.bind(this);
+        this.updateBio = this.updateBio.bind(this);
         this.getUserData = this.getUserData.bind(this);
         this.logoutUser = this.logoutUser.bind(this);
         this.updateUserState = this.updateUserState.bind(this);
@@ -63,7 +68,7 @@ export default class SelfProfile extends React.Component {
         })
         this.showUploader();
     }
-    displayNewBio(newBio) {
+    updateBio(newBio) {
         this.setState({
             user: {
                 id: this.state.user.id,
@@ -85,27 +90,27 @@ export default class SelfProfile extends React.Component {
             }
         })
     }
-    logoutUser() {
-        this.setState({
-            user: {
-                id: '',
-                first: '',
-                last: '',
-                email: '',
-                picUrl: '',
-                bio: ''
-            },
-            uploaderVisible: false,
-            page: "profile"
-        })
-        location.replace('/');
-    }
+    // logoutUser() {
+    //     this.setState({
+    //         user: {
+    //             id: '',
+    //             first: '',
+    //             last: '',
+    //             email: '',
+    //             picUrl: '',
+    //             bio: ''
+    //         },
+    //         uploaderVisible: false,
+    //         page: "profile"
+    //     })
+    //     location.replace('/');
+    // }
     render() {
             return (
                 <div>
                     <ProfilePic user={this.state.user} page={this.state.page} showUploader={this.showUploader}/>
                     <ProfilePicUpload visible={this.state.uploaderVisible} displayNewPP={this.displayNewPP}/>
-                    <Bio bio={this.state.user.bio} displayNewBio={this.displayNewBio}/>
+                    <Bio user={this.state.user} updateBio={this.updateBio}/>
                 </div>
         )
     }

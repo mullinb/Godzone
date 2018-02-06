@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, BrowserRouter, Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from './axios';
 import Registration from './registration';
 import Login from './login';
 

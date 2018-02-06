@@ -10,6 +10,7 @@ var multer = require('multer');
 var uidSafe = require('uid-safe');
 var path = require('path');
 const fs = require('fs');
+const csurf = require('csurf');
 
 
 let dbUrl = process.env.DATABASE_URL || `postgres:${require('./secrets').dbUser}@localhost:5432/network`;
@@ -72,6 +73,13 @@ if (process.env.NODE_ENV != 'production') {
 } else {
     app.use('/bundle.js', (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+
+app.use(csurf());
+
+app.use(function(req, res, next){
+    res.cookie('mytoken', req.csrfToken());
+    next();
+});
 
 app.use(express.static('./public'));
 
@@ -194,6 +202,23 @@ app.post('/PPupload', uploader.single('file'), function(req, res) {
         })
     }
 });
+
+app.post('/BioUpload', function(req, res) {
+    console.log(req.body.bio);
+    var userid = req.session.user.id;
+    db.query(
+        `UPDATE users SET bio = $1 WHERE id = $2 RETURNING *`, [req.body.bio, userid])
+        .then((results) => {
+            res.json({
+                success: true,
+                newBio: results.rows[0].bio
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});
+
 
 
 app.listen(8080, function() {
