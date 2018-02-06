@@ -13,7 +13,30 @@ CREATE TABLE users(
     pic_url VARCHAR(1000),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE friend_status (
+    id SERIAL PRIMARY KEY,
+    requester_id INTEGER REFERENCES users(id) NOT NULL,
+    receiver_id INTEGER REFERENCES users(id) NOT NULL,
+    status_code INTEGER NOT NULL,
+    status VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 --
+
+-- MAKE LAST MODIFIED TIMESTAMP UPDATE TRIGGER -----
+
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.last_modified = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON friend_status FOR EACH ROW EXECUTE PROCEDURE  update_modified_column();
+
 -- CREATE TABLE images(
 --     id SERIAL PRIMARY KEY,
 --     image VARCHAR(300) NOT NULL,

@@ -12,6 +12,16 @@ export default class Bio extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.showUpdater = this.showUpdater.bind(this);
     }
+    componentDidMount() {
+        this.setState({
+            bio: this.props.user.bio
+        })
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            bio: nextProps.user.bio
+        })
+    }
     showUpdater(e) {
         e.preventDefault();
         this.setState({
@@ -37,16 +47,15 @@ export default class Bio extends React.Component {
             console.log(err);
         })
     }
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.user.bio.length > 0) {
-            this.setState({
-                bio: nextProps.user.bio
-            })
-        }
-    }
     render() {
-        if (this.state.updating === false) {
-            console.log(this.props.user)
+        if (this.props.otherUser) {
+            return(
+                <div>
+                    <h2>GodStory</h2>
+                    <p>{this.state.bio}</p>
+                </div>
+            )
+        } else if (this.state.updating === false) {
             return(
                 <div>
                     <h2>GodStory</h2>

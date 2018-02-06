@@ -8,7 +8,11 @@ export default class ProfilePic extends React.Component {
         super(props);
     }
     render() {
-        return (<img src={this.props.user.picUrl} alt={this.props.user.first + " " + this.props.user.last} className={styles.pp + " " + styles[this.props.page]} onClick={this.props.showUploader} />
-        )
+        if (!this.props.user) {
+            return null
+        } else {
+            return (<img src={this.props.user.picUrl} alt={this.props.user.first + " " + this.props.user.last} className={styles.pp + " " + styles[this.props.page]} onClick={this.props.showUploader} />
+            )
+        }
     }
 }
