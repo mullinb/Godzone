@@ -9,9 +9,11 @@ export default class FriendButton extends React.Component {
             status: 0,
             initiator: null,
             buttonText: [['Forge Alliance'],
-                ['Forge Alliance', 'Abandon Alliance Attempt', 'Allied', 'Alliance Denied', 'Alliance Abandoned', 'You Have Excommunicated This False God', 'Feuding'],
-                ['Forge Alliance', 'Accept Divine Alliance?', 'Allied', 'Alliance Denied', 'Forge Alliance', 'You Have Been Excommunicated', 'Feuding']
+                ['Forge Alliance', 'Abort Alliance Attempt', 'Abandon Alliance', 'Alliance Denied', 'Has Your Divine Will Changed So Flippantly? Forge Alliance', 'You Have Excommunicated This False God', 'Feuding'],
+                ['Forge Alliance', 'Accept Divine Alliance?', 'Abandon Alliance', 'Has Your Divine Will Changed So Flippantly? Forge Alliance', 'Forge Alliance', 'You Have Been Excommunicated', 'Feuding']
             ],
+            statusText: ['Allied', 'Alliance Denied', 'Alliance Abandoned', 'You Have Excommunicated This False God', 'This Fool Has Excommunicated You! Savagery!', 'You Have Declared A Curse Upon This False God', 'This Foe Has Cursed You'],
+            statusId: '',
             clickable: true
         }
         this.checkStatus = this.checkStatus.bind(this);
@@ -83,7 +85,7 @@ export default class FriendButton extends React.Component {
             )
         } else {
             return(
-                <div> {this.state.buttonText[this.state.initiator][this.state.status]} </div>
+                <div> {this.state.statusText} </div>
             )
         }
     }
