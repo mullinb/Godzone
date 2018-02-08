@@ -12,6 +12,8 @@ var uidSafe = require('uid-safe');
 var path = require('path');
 const fs = require('fs');
 const csurf = require('csurf');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 
 let dbUrl = process.env.DATABASE_URL || `postgres:${require('./secrets').dbUser}@localhost:5432/network`;
@@ -83,6 +85,22 @@ app.use(function(req, res, next){
 });
 
 app.use(express.static('./public'));
+
+io.on('connection', function(socket) {
+    console.log(`socket with the id ${socket.id} is now connected`);
+
+    socket.on('disconnect', function() {
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
+
+    socket.on('thanks', function(data) {
+        console.log(data);
+    });
+
+    socket.emit('welcome', {
+        message: 'Welome. It is nice to see you'
+    });
+});
 
 app.get('/logout', (req, res) => {
     req.session = null;
@@ -164,6 +182,30 @@ app.get('/friendstatus/:id', (req, res) => {
     } else {}
 })
 
+app.get("/getfriends", (req, res) => {
+    friends.getRelations(req.session.user.id)
+    .then(results => {
+        if (results) {
+            console.log(results.rows);
+            res.json({
+                success: true,
+                requests: results.rows
+            })
+        } else {
+            res.json({
+                success: false
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            success: false,
+            error: err
+        })
+    })
+})
+
 app.post("/friendsmanager/", (req, res) => {
     friends.checkStatus(req.session.user.id, req.body.id)
     .then((results) => {
@@ -193,10 +235,9 @@ app.post("/friendsmanager/", (req, res) => {
             })
         } else if (results.rows[0].status_code===req.body.status) {
        //AGREEMENT BETWEEN SERVER AND CLIENT
-            if (req.body.status===1) {               //BASIC FRIEND REQUEST ACCEPTANCE
+            if (req.body.status===1 && req.body.initiator===2) {               //BASIC FRIEND REQUEST ACCEPTANCE
                 friends.acceptBasicRequest(req.session.user.id, req.body.id)
                 .then((results) => {
-                    console.log(results);
                     if (results.rows[0])
                     res.json({
                         success: true,
@@ -207,8 +248,21 @@ app.post("/friendsmanager/", (req, res) => {
                 .catch((err) => {
                     console.log(err);
                 })
-            } else if (req.body.status===2 && req.body.initiator===1) {  //INITIATOR CANCELS REQUEST
+            } else if (req.body.status===1 && req.body.initiator===1) {             //INITIATOR CANCELS REQUEST
                 friends.cancelRequest(req.session.user.id, req.body.id)
+                .then((results) => {
+                    if (results.rows[0])
+                    res.json({
+                        success: true,
+                        friendRequestStatus: results.rows[0].status_code,
+                        friendRequestInitiator: req.body.initiator
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            } else if (req.body.status===2) { // EITHER USER UNFRIENDS
+                friends.unfriend(req.session.user.id, req.body.id)
                 .then((results) => {
                     if (results.rows[0])
                     res.json({
@@ -217,20 +271,13 @@ app.post("/friendsmanager/", (req, res) => {
                         friendRequestInitiator: 1
                     })
                 })
-            } else if (req.body.status===2 && req.body.initiator===2) { //RECEIVER DENIES REQUEST
-                friends.denyRequest(req.session.user.id, req.body.id)
-                .then((results) => {
-                    res.json({
-
-                    })
-                })
             } else if (req.body.status===3 && req.body.initiator===1) { // INITIATOR HAS ALREADY BEEN DENIED, THIS SHOULD NEVER HAPPEN / RESULT IN A SPECIAL MESSAGE
                 res.json({
                     success: false,
-                    error: "not allowed"
+                    error: "you gon have ta wait"
                 })
             } else if (req.body.status===3 && req.body.initiator===2) {  // INITIAL REQUEST WAS DENIED BY RECEIVER, HOWEVER RECEIVER MAY MAKE NEW REQUEST
-                friends.makeRequest(req.session.user.id, req.body.id)
+                friends.makeNewRequest(req.session.user.id, req.body.id)
                 .then((results) => {
                     if (results.rows[0]) {
                         res.json({
@@ -241,7 +288,7 @@ app.post("/friendsmanager/", (req, res) => {
                     }
                 })
             } else if (req.body.status===4) { // ORIGINAL INITIATOR HAS ABANDONED REQUEST, BUT EITHER MAY INITIATE NEW REQUEST
-                friends.makeRequest(req.session.user.id, req.body.id)
+                friends.makeNewRequest(req.session.user.id, req.body.id)
                 .then((results) => {
                     if (results.rows[0]) {
                         res.json({
@@ -252,16 +299,16 @@ app.post("/friendsmanager/", (req, res) => {
                     }
                 })
             } else if (req.body.status===5) { //INITIATOR OF UNFRIENDING MUST BE REDEFINED --
-                // friends.makeRequest(req.session.user.id, req.body.id)
-                // .then((results) => {
-                //     if (results.rows[0]) {
-                //         res.json({
-                //             success: true,
-                //             friendRequestStatus: results.rows[0].status_code,
-                //             friendRequestInitiator: 1
-                //         })
-                //     }
-                // })
+                friends.makeNewRequest(req.session.user.id, req.body.id)
+                .then((results) => {
+                    if (results.rows[0]) {
+                        res.json({
+                            success: true,
+                            friendRequestStatus: results.rows[0].status_code,
+                            friendRequestInitiator: 1
+                        })
+                    }
+                })
             } else if (req.body.status===6) { //INITIATOR OF BLOCK MUST BE REDEFINED -- perhaps a separate table??
                 friends.blockUser(req.session.user.id, req.body.id)
                 .then((results) => {
@@ -273,6 +320,72 @@ app.post("/friendsmanager/", (req, res) => {
         }
     })
     .catch((err) => {
+        console.log(err);
+    })
+})
+
+app.post("/friendAcceptOrReject/", (req, res) => {
+    friends.checkStatus(req.session.user.id, req.body.id)
+    .then((results) => {
+        if (results) {
+            if (results.rows[0] && results.rows[0].status_code !== req.body.status) {                 //SOMETHING WEIRD CLIENT-SIDE
+                res.json({
+                    success: false,
+                    error: "desynced"
+                })
+            } else if (req.body.choice=="accept") {
+                console.log('trying to accept')
+                friends.acceptBasicRequest(req.session.user.id, req.body.id)
+                .then((results) => {
+                    if (results.rows[0]) {
+                        res.json({
+                            success: true,
+                            friendRequestStatus: results.rows[0].status_code,
+                            friendRequestInitiator: 1
+                        })
+                    }
+                })
+            } else if (req.body.choice==="reject") {
+                console.log('inside');
+                friends.denyRequest(req.session.user.id, req.body.id)
+                .then((results) => {
+                    if (results.rows[0]) {
+                        res.json({
+                            success: true,
+                            friendRequestStatus: results.rows[0].status_code,
+                            friendRequestInitiator: 1
+                        })
+                    }
+                })
+            }
+        }
+    })
+})
+
+app.post("/unfriend", (req, res) => {
+    friends.checkStatus(req.session.user.id, req.body.id)
+    .then((results) => {
+        if (results) {
+            if (results.rows[0] && results.rows[0].status_code !== req.body.status) {                 //SOMETHING WEIRD CLIENT-SIDE
+                res.json({
+                    success: false,
+                    error: "desynced"
+                })
+            } else if (req.body.choice==="excom") {
+                friends.denyRequest(req.session.user.id, req.body.id)
+                .then((results) => {
+                    if (results.rows[0]) {
+                        res.json({
+                            success: true,
+                            friendRequestStatus: results.rows[0].status_code,
+                            friendRequestInitiator: 1
+                        })
+                    }
+                })
+            }
+        }
+    })
+    .catch(err=> {
         console.log(err);
     })
 })
@@ -378,6 +491,6 @@ app.post('/BioUpload', function(req, res) {
 
 
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
 });

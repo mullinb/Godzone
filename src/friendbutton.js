@@ -12,8 +12,8 @@ export default class FriendButton extends React.Component {
                 ['Forge Alliance', 'Abort Alliance Attempt', 'Abandon Alliance', 'Alliance Denied', 'Has Your Divine Will Changed So Flippantly? Forge Alliance', 'You Have Excommunicated This False God', 'Feuding'],
                 ['Forge Alliance', 'Accept Divine Alliance?', 'Abandon Alliance', 'Has Your Divine Will Changed So Flippantly? Forge Alliance', 'Forge Alliance', 'You Have Been Excommunicated', 'Feuding']
             ],
-            statusText: ['Allied', 'Alliance Denied', 'Alliance Abandoned', 'You Have Excommunicated This False God', 'This Fool Has Excommunicated You! Savagery!', 'You Have Declared A Curse Upon This False God', 'This Foe Has Cursed You'],
-            statusId: '',
+            statusText: ['Allied', 'Alliance Denied', 'Alliance Abandoned', 'You Have Excommunicated This False God', 'This Fool Has Excommunicated You! Savagery!', 'You Have Declared A Curse Upon This False God', 'This Foe Has Cursed You', ''],
+            statusId: 8,
             clickable: true
         }
         this.checkStatus = this.checkStatus.bind(this);
@@ -42,6 +42,10 @@ export default class FriendButton extends React.Component {
             })
         })
     }
+    setStatusId() {
+        this.state.status
+        this.state.initiator
+    }
     handleClick(e, id) {
         console.log(this.state.status)
         if (true) {
@@ -59,6 +63,9 @@ export default class FriendButton extends React.Component {
                     })
                     if (this.state.status===2) {
                         this.setUnclickable();
+                        this.setState({
+                            statusId: 0
+                        })
                     }
                 })
             }
@@ -85,7 +92,7 @@ export default class FriendButton extends React.Component {
             )
         } else {
             return(
-                <div> {this.state.statusText} </div>
+                <div> {this.state.statusText[this.state.statusCode]} </div>
             )
         }
     }

@@ -5,6 +5,7 @@ import Footer from './footer';
 import SelfProfile from './selfProfile';
 import OtherProfile from './otherProfile';
 import FourOhFour from './404';
+import { ConnectedFriendsPage } from './friendsPage';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -77,7 +78,6 @@ export default class App extends React.Component {
     //     })
     // }
     render() {
-
         return (
             <BrowserRouter>
                 <div>
@@ -97,6 +97,7 @@ export default class App extends React.Component {
                                 return null
                             }
                         }}  />
+                        <Route exact path="/friends" component={ ConnectedFriendsPage }/>
                         <Route path="*" render={() => {
                             return (<FourOhFour logoutUser={this.logoutUser} />)
                         }}  />
