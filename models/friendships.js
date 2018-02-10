@@ -110,3 +110,8 @@ exports.getFriendsAndInfo = (userId) => {
 exports.getRequestsAndInfo = (userId) => {
     return db.query(`SELECT users.id, first, last, pic_url FROM friend_status RIGHT JOIN users ON (users.id=friend_status.requester_id) WHERE receiver_id = $1 AND status_code=1`, [userId])
 }
+
+exports.getUsersByIds = (arrayOfIds) => {
+    const query = `SELECT * FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+}

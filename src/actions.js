@@ -2,9 +2,7 @@ import axios from './axios';
 
 
 export function getFriends() {
-    let friends,
-        requests;
-    return axios.get("/getfriends")
+    return axios.get("/friends/getfriends")
     .then(({data}) => {
         if (data.success) {
             return {
@@ -13,16 +11,31 @@ export function getFriends() {
             };
         } else {
             console.log("THIS IS AN ERROR" + data.error);
-            return
+            return;
         }
     })
+}
+
+export function getAllUsers() {
+    return axios.get("/friends/getAllUsers")
+    .then(({data})) => {
+        if (data.success) {
+            return {
+                type: 'INITIALIZE_ONLINE_USERS',
+                onlineUsers: data.onlineUsers
+            }
+        } else {
+            console.log("THIS IS AN ERROR" + data.error);
+            return;
+        }
+    }
 }
 
 export function buttonClick(e) {
     let click = e.target.name
     let clickid = e.target.id
     if (click==="accept") {
-        return axios.post('/friendAcceptOrReject', {
+        return axios.post('/friends/friendAcceptOrReject', {
             id: clickid,
             status: 1,
             choice: click
@@ -37,7 +50,7 @@ export function buttonClick(e) {
             }
         })
     } else if (click==="reject") {
-        return axios.post('/friendAcceptOrReject', {
+        return axios.post('/friends/friendAcceptOrReject', {
             id: clickid,
             status: 1,
             choice: click
@@ -51,7 +64,7 @@ export function buttonClick(e) {
             }
         })
     } else if (click==="excom") {
-        return axios.post('/unfriend', {
+        return axios.post('/friends/unfriend', {
             id: clickid,
             status: 2,
             choice: click
@@ -70,16 +83,3 @@ export function buttonClick(e) {
         }
     }
 }
-
-// export function updateFriendList(list) {
-//     return {
-//         type: 'UPDATE_FRIEND_LIST',
-//         list: list
-//     };
-// }
-// export function updateRequestList(list) {
-//     return {
-//         type: 'UPDATE_REQUEST_LIST',
-//         list: list
-//     };
-// }

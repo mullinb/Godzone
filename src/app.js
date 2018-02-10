@@ -6,6 +6,8 @@ import SelfProfile from './selfProfile';
 import OtherProfile from './otherProfile';
 import FourOhFour from './404';
 import { ConnectedFriendsPage } from './friendsPage';
+import { OnlineFriends } from './onlinenow'
+import { init } from './socket';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -43,6 +45,7 @@ export default class App extends React.Component {
     }
     componentDidMount() {
         this.getUserData();
+        init();
     }
     displayNewPP(imgUrl) {
         this.setState({
@@ -97,7 +100,9 @@ export default class App extends React.Component {
                                 return null
                             }
                         }}  />
-                        <Route exact path="/friends" component={ ConnectedFriendsPage }/>
+                        <Route exact path="/friends" component={ ConnectedFriendsPage } />
+                        <Route exact path="/onlinenow" component={ OnlineFriends } />)
+                        }}  />
                         <Route path="*" render={() => {
                             return (<FourOhFour logoutUser={this.logoutUser} />)
                         }}  />

@@ -43,5 +43,20 @@ export function reducer(state = {}, action) {
         });
         return Object.assign({}, state, { user });
     }
+    if (action.type == 'INITIALIZE_ONLINE_USERS') {
+        state = Object.assign({}, state, {
+            onlineUsers: action.onlineUsers
+        })
+    }
+    if (action.type == 'USER_JOINED') {
+        state = Object.assign({}, state, {
+            onlineUsers: [ ...state.onlineUsers, action.user ]
+        })
+    }
+    if (action.type == 'USER_LEFT') {
+        state = Object.assign({}, state, {
+            onlineUsers: [ ...state.onlineUsers, ]
+        })
+    }
     return state;
 }

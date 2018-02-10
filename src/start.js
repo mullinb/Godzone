@@ -5,7 +5,6 @@ import { HashRouter, Route, BrowserRouter } from 'react-router-dom';
 import Welcome from './welcome';
 import App from './app';
 import styles from "../stylesheets/stylesheet.css";
-import * as io from 'socket.io-client';
 
 
 import { createStore, applyMiddleware } from 'redux';

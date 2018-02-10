@@ -6,7 +6,6 @@ import { buttonClick, getFriends } from './actions';
 
 const mapStateToProps = function(state) {
     return {
-        friends: state.user && state.user.friends,
         requests: state.user && state.user.requests
     };
 };
@@ -24,9 +23,10 @@ class Lists extends React.Component {
         this.generateList = this.generateList.bind(this);
     }
     generateList(listItems, type) {
+        console.log(listItems);
         if (type===1) {
             if (listItems===undefined) {
-                return <div> You have no friends </div>
+                return <div> A PITY, YE ARE PITIFUL INDEED, A GOD WITHOUT ALLIES IS SURE TO FALL </div>
             } else {
                 const list = listItems.map((listItem) =>
                     <div key={listItem.id}>
@@ -47,6 +47,19 @@ class Lists extends React.Component {
                         {listItem.id}
                         <button name="accept" id={listItem.id} onClick={this.props.buttonClick}>ACCEPT ALLIANCE</button>
                         <button name="reject" id={listItem.id} onClick={this.props.buttonClick}>BRUTALLY REJECT</button>
+                    </div>
+                )
+                return (
+                    <div>{list}</div>
+                );
+            }
+        } else if (type===3) {
+            if (listItems===undefined) {
+                return <div> NO ONE BE YET HERE, FRIENDLY OR DEMONIC </div>
+            } else {
+                const list = listItems.map((listItem) =>
+                     <div key={listItem.id}>
+                        {listItem.first} {listItem.last}
                     </div>
                 )
                 return (
