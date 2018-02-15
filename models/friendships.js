@@ -115,6 +115,10 @@ exports.getUsersByIds = (arrayOfIds) => {
     return db.query(query, [arrayOfIds]);
 }
 
+exports.getAllUsers = () => {
+    return db.query(`SELECT * FROM users`);
+}
+
 exports.logChat = (message, user) => {
     return db.query(`INSERT INTO chatlog (message, user_id) VALUES ($1, $2) RETURNING *`, [message.message, user])
 }

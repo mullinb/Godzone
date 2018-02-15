@@ -25,7 +25,7 @@ class Lists extends React.Component {
         this.generateList = this.generateList.bind(this);
     }
     generateList(listItems, type) {
-        console.log(listItems);
+        let generic = "https://s3.amazonaws.com/fluxlymoppings/pics/yEp--cx3qKRjQJk6NEhTJupEK3-mGuar.jpg";
         if (type===1) {
             if (listItems===undefined) {
                 return <div> A PITY, YE ARE PITIFUL INDEED, A GOD WITHOUT ALLIES IS SURE TO FALL </div>
@@ -33,7 +33,7 @@ class Lists extends React.Component {
                 const list = listItems.map((listItem) =>
                     <div key={listItem.id}>
                         <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
-                            <img src={listItem.pic_url} className={styles.onlineUserPic} />
+                            <img src={listItem.pic_url || generic} className={styles.onlineUserPic} />
                         </Link>
                         <button name="excom" id={listItem.id} onClick={this.props.buttonClick}>unfriend</button>
                     </div>
@@ -49,7 +49,7 @@ class Lists extends React.Component {
                 const list = listItems.map((listItem) =>
                      <div key={listItem.id}>
                          <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
-                             <img src={listItem.pic_url} className={styles.onlineUserPic} />
+                             <img src={listItem.pic_url || generic} className={styles.onlineUserPic} />
                          </Link>
                         <button name="accept" id={listItem.id} onClick={this.props.buttonClick}>ACCEPT ALLIANCE</button>
                         <button name="reject" id={listItem.id} onClick={this.props.buttonClick}>BRUTALLY REJECT</button>
@@ -66,7 +66,7 @@ class Lists extends React.Component {
                 const list = listItems.map((listItem) =>
                      <div key={listItem.id}>
                         <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
-                            <img src={listItem.pic_url} className={styles.onlineUserPic} />
+                            <img src={listItem.pic_url || generic} className={styles.onlineUserPic} />
                         </Link>
                     </div>
                 )
@@ -78,7 +78,7 @@ class Lists extends React.Component {
             const list = listItems.map((listItem) =>
                  <div key={listItem.id}>
                     <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
-                        <img src={listItem.pic_url} className={styles.chatUserPic} />
+                        <img src={listItem.pic_url || generic} className={styles.chatUserPic} />
                     </Link>
                 </div>
             )

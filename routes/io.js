@@ -18,19 +18,19 @@ module.exports = function(io) {
 
         const userId = session.user.id;
 
-        friends.getUsersByIds([userId])
-        .then((results) => {
-            for (let i=0; i<results.rows.length; i++) {
-                if (results.rows[i].pic_url) {
-                    results.rows[i].pic_url = config.s3Url.concat(results.rows[0].pic_url);
+        if (!onlineUsers.has(userId)) {
+            friends.getUsersByIds([userId])
+            .then((results) => {
+                if (results.rows[0].pic_url) {
+                    results.rows[0].pic_url = config.s3Url.concat(results.rows[0].pic_url);
                 }
-            }
-            onlineUsers.add(userId);
-            io.sockets.sockets[socket.id].broadcast.emit('userJoined', {
-                userJoined: results.rows[0]
+                onlineUsers.add(userId);
+                io.sockets.sockets[socket.id].broadcast.emit('userJoined', {
+                    userJoined: results.rows[0]
+                })
             })
-        })
-        .catch(err => console.log(err))
+            .catch(err => console.log(err))
+        }
 
 
         socket.on('disconnect', function() {
@@ -56,7 +56,7 @@ module.exports = function(io) {
             .then((results) => {
                 for (let i=0; i<results.rows.length; i++) {
                     if (results.rows[i].pic_url) {
-                        results.rows[i].pic_url = config.s3Url.concat(results.rows[0].pic_url);
+                        results.rows[i].pic_url = config.s3Url.concat(results.rows[i].pic_url);
                     }
                 }
                 io.sockets.sockets[socket.id].emit('onlineUsers', {
@@ -66,23 +66,45 @@ module.exports = function(io) {
         });
 
         socket.on('joinedChat', () => {
-
-            chatUsers.add(userId);
-            let array = [];
-            chatUsers.forEach(x => array.push(x));
-            friends.getUsersByIds(array)
-            .then((results) => {
-                io.sockets.sockets[socket.id].emit('chatUsers', results.rows)
-            })
-            .catch(err => console.log(err))
-
-            friends.getUsersByIds([userId])
-            .then((results) => {
-                io.sockets.sockets[socket.id].broadcast.emit('addChatUser', {
-                    user: results.rows[0]
+            if (!chatUsers.has(userId)) {
+                chatUsers.add(userId);
+                let array = [];
+                chatUsers.forEach(x => array.push(x));
+                friends.getUsersByIds(array)
+                .then((results) => {
+                    for (let i=0; i<results.rows.length; i++) {
+                        if (results.rows[i].pic_url) {
+                            results.rows[i].pic_url = config.s3Url.concat(results.rows[i].pic_url);
+                        }
+                    }
+                    io.sockets.sockets[socket.id].emit('chatUsers', results.rows)
                 })
-            })
-            .catch(err => console.log(err))
+                .catch(err => console.log(err))
+
+                friends.getUsersByIds([userId])
+                .then((results) => {
+                    if (results.rows[0].pic_url) {
+                        results.rows[0].pic_url = config.s3Url.concat(results.rows[0].pic_url);
+                    }
+                    io.sockets.sockets[socket.id].broadcast.emit('addChatUser', {
+                        user: results.rows[0]
+                    })
+                })
+                .catch(err => console.log(err))
+
+                friends.getAllUsers()
+                .then((results) => {
+                    for (let i=0; i<results.rows.length; i++) {
+                        if (results.rows[i].pic_url) {
+                            results.rows[i].pic_url = config.s3Url.concat(results.rows[i].pic_url);
+                        }
+                    }
+                    io.sockets.sockets[socket.id].emit('populateAllUsers', {
+                        users: results.rows
+                    })
+                })
+                .catch(err => console.log(err))
+            }
         })
 
         friends.getChatMessages()
@@ -94,7 +116,8 @@ module.exports = function(io) {
             console.log(message);
             friends.logChat(message, userId)
             .then((result) => {
-                socket.emit('newMessage', result.rows[0])
+                console.log(result.rows[0]);
+                io.sockets.emit('newMessage', result.rows[0])
             })
         })
 

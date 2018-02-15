@@ -1,6 +1,6 @@
 import * as io from 'socket.io-client';
 import { store } from './start';
-import { initializeOnlineUsers, addOnlineUser, removeOnlineUser, initializeChatUsers, addChatUser, removeChatUser, populateChatMessages, populateNewMessage } from './actions';
+import { initializeOnlineUsers, addOnlineUser, removeOnlineUser, initializeChatUsers, addChatUser, removeChatUser, populateChatMessages, populateNewMessage, populateAllUsers } from './actions';
 
 let socket;
 
@@ -44,6 +44,8 @@ export function initChat() {
 
     socket.on('newMessage', gettingNewMessage);
 
+    socket.on('populateAllUsers', gettingAllUsers)
+
     function gettingChatUsers(users) {
         store.dispatch(initializeChatUsers(users))
     }
@@ -62,6 +64,10 @@ export function initChat() {
 
     function gettingNewMessage(data) {
         store.dispatch(populateNewMessage(data))
+    }
+
+    function gettingAllUsers(data) {
+        store.dispatch(populateAllUsers(data))
     }
 }
 

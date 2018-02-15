@@ -11,8 +11,9 @@ import styles from "../stylesheets/stylesheet.css";
 
 const mapStateToProps = function(state) {
     return {
+        allUsers: state.allUsers,
         users: state.chatUsers,
-        chatlog: state.chatlog
+        messages: state.messages
     };
 };
 
@@ -24,6 +25,7 @@ class makeChatRoom extends React.Component {
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleEnter = this.handleEnter.bind(this);
     }
     handleInputChange(event) {
         const target = event.target;
@@ -35,27 +37,41 @@ class makeChatRoom extends React.Component {
     }
     handleClick() {
         sendChatMessage(this.state.message);
+        this.setState({
+            message: ''
+        })
+    }
+    handleEnter(e) {
+        if (e.key == "Enter") {
+            e.preventDefault();
+            this.handleClick();
+        }
     }
     generateChat(arr) {
-        if (arr) {
-            const messageList = arr.map((arrItem) => {
-                for (var i = 0; i<this.props.users.length; i++) {
-                    if (this.props.users[i].id == arrItem.userId) {
-                        arrItem.img = this.props.users[i].pic_url;
+        if (arr && this.props.allUsers) {
+            let userData = this.props.allUsers.users;
+            let messageList = arr.map((arrItem) => {
+                for (var i = 0; i<userData.length; i++) {
+                    if (userData[i].id == arrItem.user_id) {
+                        arrItem.img = userData[i].pic_url || "https://s3.amazonaws.com/fluxlymoppings/pics/yEp--cx3qKRjQJk6NEhTJupEK3-mGuar.jpg";
+                        arrItem.name = userData[i].first + " " + userData[i].last;
                     }
                 }
+                arrItem.date = (new Date(arrItem.created_at).toLocaleString())
                 return (
                 <div key={arrItem.id}>
-                    <div>
+                    <img src={arrItem.img} className={styles.otherChatUserPic}/>
+                    <span>
                         {arrItem.message}
+                    </span>
+                    <div style={{float: "right"}}>
+                        {arrItem.date}
                     </div>
-                    <div>
-                        {arrItem.timestamp}
-                    </div>
-                    <img src={arrItem.img} className={styles.onlineUserPic}/>
                 </div>
                 )
             })
+            console.log(messageList);
+            messageList = messageList.slice(-10);
             return messageList;
         }
     }
@@ -72,9 +88,9 @@ class makeChatRoom extends React.Component {
                 <div className={styles.chatwindow}>
                     <div className={styles.leftchat}>
                         <div className={styles.chatbox}>
-                            {this.generateChat(this.props.chatlog)}
+                            {this.generateChat(this.props.messages)}
                         </div>
-                        <textarea type="text" value={this.state.message} onChange={this.handleInputChange} name="message" placeholder="Show off your godliness with language"  required />
+                        <textarea type="text" value={this.state.message} onKeyPress={this.handleEnter} onChange={this.handleInputChange} name="message" placeholder="Show off your godliness with language"  required />
                         <button onClick={this.handleClick}>JACK IN THAT MSG YEA</button>
                     </div>
 

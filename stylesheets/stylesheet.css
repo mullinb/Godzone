@@ -1,4 +1,4 @@
-* {
+body {
     background-color: red;
 }
 
@@ -25,9 +25,11 @@
 }
 
 .chatbox {
-    background-color: white;
-    height: 500px;
-    width: 100%;
+    background-color: white !important;
+    border: black 2px solid;
+    margin: 10px;
+    width: 95%;
+    height: 95%;
 }
 
 .chatlist {
@@ -35,10 +37,16 @@
 }
 
 .chatUserPic {
+    display: inline;
     height: 50px;
     width: 50px;
 }
 
+.otherChatUserPic {
+    display: inline;
+    height: 20px;
+    width: 20px;
+}
 
 .link {
     color: blue;

@@ -58,7 +58,6 @@ export function removeChatUser(user) {
 }
 
 export function populateChatMessages(data) {
-    console.log(data);
     return {
         type: "POPULATE_CHAT",
         data
@@ -69,6 +68,28 @@ export function populateNewMessage(data) {
     return {
         type: "POPULATE_NEW_MESSAGE",
         message: data
+    }
+}
+
+export function populateAllUsers(data) {
+    console.log(data);
+    return {
+        type: "POPULATE_ALL_USERS",
+        data
+    }
+}
+
+export function addToAllUsers(user) {
+    return {
+        type: "ADD_TO_ALL_USERS",
+        user
+    }
+}
+
+export function updateOnAllUsers(user) {
+    return {
+        type: "UPDATE_ON_ALL_USERS",
+        user
     }
 }
 

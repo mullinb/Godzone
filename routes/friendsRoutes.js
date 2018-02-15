@@ -45,7 +45,7 @@ router.get("/getfriends", (req, res) => {
         if (results) {
             for (let i=0; i<results.rows.length; i++) {
                 if (results.rows[i].pic_url) {
-                    results.rows[i].pic_url = config.s3Url.concat(results.rows[0].pic_url);
+                    results.rows[i].pic_url = config.s3Url.concat(results.rows[i].pic_url);
                 }
             }
             res.json({

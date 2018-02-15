@@ -220,10 +220,10 @@ app.post('/PPupload', uploader.single('file'), function(req, res) {
             db.query(
                 `UPDATE users SET pic_url = $1 WHERE id = $2 RETURNING *`, [req.file.filename, userid])
                 .then((results) => {
-                    let imgUrl = config.s3Url.concat(results.rows[0].pic_url);
+                    results.rows[0].pic_url = config.s3Url.concat(results.rows[0].pic_url);
                     res.json({
                         success: true,
-                        imgUrl: imgUrl
+                        user: results.rows[0]
                     });
                 })
                 .catch((err) => {

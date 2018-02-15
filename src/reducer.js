@@ -66,6 +66,7 @@ export function reducer(state = {}, action) {
         })
     }
     if (action.type == 'ADD_CHAT_USER') {
+        console.log([ ...state.chatUsers, action.user ], " THIS IS THE POPULATE");
         state = Object.assign({}, state, {
             chatUsers: [ ...state.chatUsers, action.user ]
         })
@@ -82,15 +83,33 @@ export function reducer(state = {}, action) {
     }
     if (action.type == 'POPULATE_CHAT') {
         state = Object.assign({}, state, {
-            messages: action.messages
+            messages: action.data
         })
     }
     if (action.type == 'POPULATE_NEW_MESSAGE') {
-        console.log(state.messages, action.message);
         state = Object.assign({}, state, {
             messages: [ ...state.messages, action.message ]
         })
     }
-
+    if (action.type == 'POPULATE_ALL_USERS') {
+        state = Object.assign({}, state, {
+            allUsers: action.data
+        })
+    }
+    if (action.type == 'ADD_TO_ALL_USERS') {
+        state = Object.assign({}, state, {
+            allUsers: [...state.allUsers, action.user]
+        })
+    }
+    if (action.type == 'UPDATE_ON_ALL_USERS') {
+        state = Object.assign({}, state, {
+            allUsers: state.allUsers.map((user) => {
+                if (user.id==action.user.id) {
+                    user=action.user;
+                }
+                return user;
+            })
+        })
+    }
     return state;
 }

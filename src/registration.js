@@ -1,8 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from './axios';
+import { connect } from 'react-redux';
+import { store } from './start';
+import { addToAllUsers } from './actions'
 
-export default class Registration extends React.Component {
+
+const mapStateToProps = function(state) {
+    return {
+        ignore: "this"
+    };
+};
+
+export default class makeRegistration extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,6 +43,7 @@ export default class Registration extends React.Component {
             console.log(data.success);
             if (data.success) {
                 location.replace('/');
+                store.dispatch(addToAllUsers(data.user))
             } else {
                 this.setState({
                     error: true
@@ -58,3 +69,5 @@ export default class Registration extends React.Component {
         );
     }
 }
+
+export const Registration = connect(mapStateToProps)(makeRegistration);
