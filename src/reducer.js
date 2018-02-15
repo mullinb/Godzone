@@ -1,6 +1,3 @@
-
-
-
 export function reducer(state = {}, action) {
     console.log(action);
     if (action.type == 'INITIALIZE_PAGE') {
@@ -45,18 +42,55 @@ export function reducer(state = {}, action) {
     }
     if (action.type == 'INITIALIZE_ONLINE_USERS') {
         state = Object.assign({}, state, {
-            onlineUsers: action.onlineUsers
+            onlineUsers: action.users
         })
     }
-    if (action.type == 'USER_JOINED') {
+    if (action.type == 'ADD_ONLINE_USER') {
         state = Object.assign({}, state, {
             onlineUsers: [ ...state.onlineUsers, action.user ]
         })
     }
-    if (action.type == 'USER_LEFT') {
+    if (action.type == 'REMOVE_ONLINE_USER') {
         state = Object.assign({}, state, {
-            onlineUsers: [ ...state.onlineUsers, ]
+            onlineUsers: state.onlineUsers.filter((user) => {
+                if (user.id==action.userId) {
+                    return false;
+                }
+                else return true;
+            })
         })
     }
+    if (action.type == 'INITIALIZE_CHAT_USERS') {
+        state = Object.assign({}, state, {
+            chatUsers: action.users
+        })
+    }
+    if (action.type == 'ADD_CHAT_USER') {
+        state = Object.assign({}, state, {
+            chatUsers: [ ...state.chatUsers, action.user ]
+        })
+    }
+    if (action.type == 'REMOVE_CHAT_USER') {
+        state = Object.assign({}, state, {
+            chatUsers: state.chatUsers.filter((user) => {
+                if (user.id==action.userId) {
+                    return false;
+                }
+                else return true;
+            })
+        })
+    }
+    if (action.type == 'POPULATE_CHAT') {
+        state = Object.assign({}, state, {
+            messages: action.messages
+        })
+    }
+    if (action.type == 'POPULATE_NEW_MESSAGE') {
+        console.log(state.messages, action.message);
+        state = Object.assign({}, state, {
+            messages: [ ...state.messages, action.message ]
+        })
+    }
+
     return state;
 }

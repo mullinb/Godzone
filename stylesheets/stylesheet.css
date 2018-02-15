@@ -10,6 +10,36 @@
 .pp {
 }
 
+.onlineUserPic {
+    height: 200px;
+    width: 200px;
+}
+
+.chatwindow {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.leftchat {
+    grid-column: 0;
+}
+
+.chatbox {
+    background-color: white;
+    height: 500px;
+    width: 100%;
+}
+
+.chatlist {
+    grid-column: 2;
+}
+
+.chatUserPic {
+    height: 50px;
+    width: 50px;
+}
+
+
 .link {
     color: blue;
     text-decoration: underline;

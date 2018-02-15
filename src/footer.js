@@ -28,6 +28,8 @@ export default class Footer extends React.Component {
 
                     OR MAYBE THON GODLY FRAME OF GOSSIP IST MAL CURIOUS, CURIOSO INDEED, C'É QUALCUNO CHI É <Link to="/onlinenow">JETZT ATOP OLYMPUS</Link>??
                     <br />
+
+                    YA CAN EVEN <Link to="/chat">CHAT RIGHT THIS INSTANT WHOA</Link>??
                 <p> Shouldst yon sickly mortal will it done, <span onClick={this.logoutRequest} className={styles.link}> descendin back to earthly ways</span>. </p>
             </div>
         )

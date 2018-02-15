@@ -1,6 +1,5 @@
 import axios from './axios';
 
-
 export function getFriends() {
     return axios.get("/friends/getfriends")
     .then(({data}) => {
@@ -16,18 +15,60 @@ export function getFriends() {
     })
 }
 
-export function getAllUsers() {
-    return axios.get("/friends/getAllUsers")
-    .then(({data})) => {
-        if (data.success) {
-            return {
-                type: 'INITIALIZE_ONLINE_USERS',
-                onlineUsers: data.onlineUsers
-            }
-        } else {
-            console.log("THIS IS AN ERROR" + data.error);
-            return;
-        }
+export function initializeOnlineUsers(users) {
+    return {
+        type: 'INITIALIZE_ONLINE_USERS',
+        users: users
+    }
+}
+
+export function addOnlineUser(user) {
+    return {
+        type: 'ADD_ONLINE_USER',
+        user
+    }
+}
+
+export function removeOnlineUser(userId) {
+    return {
+        type: 'REMOVE_ONLINE_USER',
+        userId
+    }
+}
+
+export function initializeChatUsers(users) {
+    return {
+        type: "INITIALIZE_CHAT_USERS",
+        users
+    }
+}
+
+export function addChatUser(user) {
+    return {
+        type: "ADD_CHAT_USER",
+        user
+    }
+}
+
+export function removeChatUser(user) {
+    return {
+        type: "REMOVE_CHAT_USER",
+        user
+    }
+}
+
+export function populateChatMessages(data) {
+    console.log(data);
+    return {
+        type: "POPULATE_CHAT",
+        data
+    }
+}
+
+export function populateNewMessage(data) {
+    return {
+        type: "POPULATE_NEW_MESSAGE",
+        message: data
     }
 }
 

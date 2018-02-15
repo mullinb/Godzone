@@ -43,7 +43,11 @@ router.get("/getfriends", (req, res) => {
     friends.getRelations(req.session.user.id)
     .then(results => {
         if (results) {
-            console.log(results.rows);
+            for (let i=0; i<results.rows.length; i++) {
+                if (results.rows[i].pic_url) {
+                    results.rows[i].pic_url = config.s3Url.concat(results.rows[0].pic_url);
+                }
+            }
             res.json({
                 success: true,
                 requests: results.rows
@@ -62,6 +66,7 @@ router.get("/getfriends", (req, res) => {
         })
     })
 })
+
 
 router.post("/friendsmanager/", (req, res) => {
     friends.checkStatus(req.session.user.id, req.body.id)

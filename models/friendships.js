@@ -80,7 +80,6 @@ exports.getRelations = (userId) => {
     return db.query(q, [userId])
 }
 
-
 exports.getFriendsAndInfo = (userId) => {
     let array = [];
     return db.query(`SELECT * FROM friend_status WHERE requester_id =$1 AND status_code=2 OR receiver_id=$1 AND status_code=2`, [userId])
@@ -92,7 +91,7 @@ exports.getFriendsAndInfo = (userId) => {
                 return row.requester_id
             }
         })
-        return array
+        return array;
     })
     .then((results)=> {
         if (results.length>0) {
@@ -114,4 +113,12 @@ exports.getRequestsAndInfo = (userId) => {
 exports.getUsersByIds = (arrayOfIds) => {
     const query = `SELECT * FROM users WHERE id = ANY($1)`;
     return db.query(query, [arrayOfIds]);
+}
+
+exports.logChat = (message, user) => {
+    return db.query(`INSERT INTO chatlog (message, user_id) VALUES ($1, $2) RETURNING *`, [message.message, user])
+}
+
+exports.getChatMessages = () => {
+    return db.query(`SELECT * FROM chatlog`)
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import axios from './axios';
 import { connect } from 'react-redux';
 import { buttonClick, getFriends } from './actions';
+import styles from "../stylesheets/stylesheet.css";
+import { Link } from 'react-router-dom';
 
 
 const mapStateToProps = function(state) {
@@ -30,12 +32,14 @@ class Lists extends React.Component {
             } else {
                 const list = listItems.map((listItem) =>
                     <div key={listItem.id}>
-                        {listItem.id}
+                        <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
+                            <img src={listItem.pic_url} className={styles.onlineUserPic} />
+                        </Link>
                         <button name="excom" id={listItem.id} onClick={this.props.buttonClick}>unfriend</button>
                     </div>
                 )
                 return (
-                    <div>{list}</div>
+                    <div> {list} </div>
                 );
             }
         } else if (type===2) {
@@ -44,7 +48,9 @@ class Lists extends React.Component {
             } else {
                 const list = listItems.map((listItem) =>
                      <div key={listItem.id}>
-                        {listItem.id}
+                         <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
+                             <img src={listItem.pic_url} className={styles.onlineUserPic} />
+                         </Link>
                         <button name="accept" id={listItem.id} onClick={this.props.buttonClick}>ACCEPT ALLIANCE</button>
                         <button name="reject" id={listItem.id} onClick={this.props.buttonClick}>BRUTALLY REJECT</button>
                     </div>
@@ -59,13 +65,26 @@ class Lists extends React.Component {
             } else {
                 const list = listItems.map((listItem) =>
                      <div key={listItem.id}>
-                        {listItem.first} {listItem.last}
+                        <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
+                            <img src={listItem.pic_url} className={styles.onlineUserPic} />
+                        </Link>
                     </div>
                 )
                 return (
                     <div>{list}</div>
                 );
             }
+        } else if (type===4) {
+            const list = listItems.map((listItem) =>
+                 <div key={listItem.id}>
+                    <Link to={"user/" + listItem.id}>{listItem.first} {listItem.last}
+                        <img src={listItem.pic_url} className={styles.chatUserPic} />
+                    </Link>
+                </div>
+            )
+            return (
+                <div>{list}</div>
+            );
         }
     }
     render() {

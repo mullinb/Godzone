@@ -6,7 +6,8 @@ import SelfProfile from './selfProfile';
 import OtherProfile from './otherProfile';
 import FourOhFour from './404';
 import { ConnectedFriendsPage } from './friendsPage';
-import { OnlineFriends } from './onlinenow'
+import { OnlineFriends } from './onlinenow';
+import { chatRoom } from './chatRoom';
 import { init } from './socket';
 
 export default class App extends React.Component {
@@ -102,6 +103,8 @@ export default class App extends React.Component {
                         }}  />
                         <Route exact path="/friends" component={ ConnectedFriendsPage } />
                         <Route exact path="/onlinenow" component={ OnlineFriends } />)
+                        }}  />
+                        <Route exact path="/chat" component={ chatRoom } />)
                         }}  />
                         <Route path="*" render={() => {
                             return (<FourOhFour logoutUser={this.logoutUser} />)
