@@ -15,6 +15,10 @@ const csurf = require('csurf');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 require('./routes/io')(io);
+var sslRedirect = require('heroku-ssl-redirect');
+var secure = require('express-force-https');
+
+app.use(sslRedirect());
 
 var router = express.Router();
 let friendRoutes = require('./routes/friendsRoutes')
