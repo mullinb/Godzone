@@ -49,7 +49,7 @@ class makeChatRoom extends React.Component {
     }
     generateChat(arr) {
         if (arr && this.props.allUsers) {
-            let userData = this.props.allUsers.users;
+            let userData = this.props.allUsers;
             let messageList = arr.map((arrItem) => {
                 for (var i = 0; i<userData.length; i++) {
                     if (userData[i].id == arrItem.user_id) {
@@ -59,18 +59,18 @@ class makeChatRoom extends React.Component {
                 }
                 arrItem.date = (new Date(arrItem.created_at).toLocaleString())
                 return (
-                <div key={arrItem.id}>
+                <div key={arrItem.id} className={styles.messageline}>
                     <img src={arrItem.img} className={styles.otherChatUserPic}/>
-                    <span>
+                    <span className={styles.textspan}>
                         {arrItem.message}
                     </span>
-                    <div style={{float: "right"}}>
-                        {arrItem.date}
+                    <div className={styles.userinfo}>
+                        {arrItem.date} <br/>
+                        {arrItem.name}
                     </div>
                 </div>
                 )
             })
-            console.log(messageList);
             messageList = messageList.slice(-10);
             return messageList;
         }
@@ -81,14 +81,19 @@ class makeChatRoom extends React.Component {
     componentWillUnmount() {
         leaveChat();
     }
+    componentDidUpdate() {
+        this.elem.scrollTop = 10000000;
+    }
     render() {
         return(
             <div>
                 <h2> <i>ENEMIES, FOES, UNKNOWNS ABOUND...FLIP YOUR COMMS SWITCH SHOULD YA BE DARIN' </i></h2>
                 <div className={styles.chatwindow}>
                     <div className={styles.leftchat}>
-                        <div className={styles.chatbox}>
-                            {this.generateChat(this.props.messages)}
+                        <div className={styles.chatbox} ref={elem => (this.elem = elem)}>
+                            <div className={styles.innerBox}>
+                                {this.generateChat(this.props.messages)}
+                            </div>
                         </div>
                         <textarea type="text" value={this.state.message} onKeyPress={this.handleEnter} onChange={this.handleInputChange} name="message" placeholder="Show off your godliness with language"  required />
                         <button onClick={this.handleClick}>JACK IN THAT MSG YEA</button>

@@ -1,5 +1,4 @@
 export function reducer(state = {}, action) {
-    console.log(action);
     if (action.type == 'INITIALIZE_PAGE') {
         const user = Object.assign({}, state.user, {
             requests: action.requests
@@ -9,7 +8,6 @@ export function reducer(state = {}, action) {
     if (action.type == 'USER_ACCEPTS') {
         const user = Object.assign({}, state.user, {
             requests: state.user.requests.map((request) => {
-                console.log(request.id, action.id)
                 if (request.id==action.id) {
                     request.status_code=2
                 }
@@ -66,7 +64,6 @@ export function reducer(state = {}, action) {
         })
     }
     if (action.type == 'ADD_CHAT_USER') {
-        console.log([ ...state.chatUsers, action.user ], " THIS IS THE POPULATE");
         state = Object.assign({}, state, {
             chatUsers: [ ...state.chatUsers, action.user ]
         })
@@ -98,7 +95,7 @@ export function reducer(state = {}, action) {
     }
     if (action.type == 'ADD_TO_ALL_USERS') {
         state = Object.assign({}, state, {
-            allUsers: [...state.allUsers, action.user]
+            allUsers: [ ...state.allUsers, action.user ]
         })
     }
     if (action.type == 'UPDATE_ON_ALL_USERS') {

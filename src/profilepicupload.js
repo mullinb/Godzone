@@ -4,15 +4,8 @@ import axios from './axios';
 import { HashRouter, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styles from "../stylesheets/stylesheet.css";
-import { connect } from 'react-redux';
-import { store } from './start';
-import { updateOnAllUsers } from './actions'
 
-const mapStateToProps = function(state) {
-    return {}
-};
-
-export default class makeProfilePicUpload extends React.Component {
+export default class ProfilePicUpload extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,8 +20,7 @@ export default class makeProfilePicUpload extends React.Component {
         axios.post("/PPUpload", formData)
         .then(({data}) => {
             if (data.success) {
-                this.props.displayNewPP(data.user.pic_url);
-                store.dispatch(updateOnAllUsers(user));
+                this.props.displayNewPP(data.imgUrl);
             }
         })
         .catch((err) => {
@@ -60,5 +52,3 @@ export default class makeProfilePicUpload extends React.Component {
         }
     }
 }
-
-export const ProfilePicUpload = connect(mapStateToProps)(makeProfilePicUpload);

@@ -50,10 +50,10 @@ export function addChatUser(user) {
     }
 }
 
-export function removeChatUser(user) {
+export function removeChatUser(userId) {
     return {
         type: "REMOVE_CHAT_USER",
-        user
+        userId
     }
 }
 
@@ -72,7 +72,6 @@ export function populateNewMessage(data) {
 }
 
 export function populateAllUsers(data) {
-    console.log(data);
     return {
         type: "POPULATE_ALL_USERS",
         data
@@ -101,7 +100,6 @@ export function buttonClick(e) {
             id: clickid,
             status: 1,
             choice: click
-
         })
         .then(({data}) => {
             if (data.success) {

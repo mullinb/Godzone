@@ -86,9 +86,7 @@ module.exports = function(io) {
                     if (results.rows[0].pic_url) {
                         results.rows[0].pic_url = config.s3Url.concat(results.rows[0].pic_url);
                     }
-                    io.sockets.sockets[socket.id].broadcast.emit('addChatUser', {
-                        user: results.rows[0]
-                    })
+                    io.sockets.sockets[socket.id].broadcast.emit('addChatUser', results.rows[0])
                 })
                 .catch(err => console.log(err))
 
@@ -99,9 +97,7 @@ module.exports = function(io) {
                             results.rows[i].pic_url = config.s3Url.concat(results.rows[i].pic_url);
                         }
                     }
-                    io.sockets.sockets[socket.id].emit('populateAllUsers', {
-                        users: results.rows
-                    })
+                    io.sockets.sockets[socket.id].emit('populateAllUsers', results.rows)
                 })
                 .catch(err => console.log(err))
             }
@@ -113,10 +109,8 @@ module.exports = function(io) {
         })
 
         socket.on('sendMessage', (message) => {
-            console.log(message);
             friends.logChat(message, userId)
             .then((result) => {
-                console.log(result.rows[0]);
                 io.sockets.emit('newMessage', result.rows[0])
             })
         })

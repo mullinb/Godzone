@@ -26,10 +26,8 @@ export default class Login extends React.Component {
     }
 
     handleSubmit(event) {
-        console.log(this.state);
         axios.post("/login", this.state)
         .then(({data}) => {
-            console.log(data.success);
             if (data.success) {
                 location.replace('/');
             } else {

@@ -196,7 +196,6 @@ router.post("/friendAcceptOrReject/", (req, res) => {
                     error: "desynced"
                 })
             } else if (req.body.choice=="accept") {
-                console.log('trying to accept')
                 friends.acceptBasicRequest(req.session.user.id, req.body.id)
                 .then((results) => {
                     if (results.rows[0]) {
@@ -208,7 +207,6 @@ router.post("/friendAcceptOrReject/", (req, res) => {
                     }
                 })
             } else if (req.body.choice==="reject") {
-                console.log('inside');
                 friends.denyRequest(req.session.user.id, req.body.id)
                 .then((results) => {
                     if (results.rows[0]) {

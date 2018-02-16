@@ -36,7 +36,6 @@ export default class FriendButton extends React.Component {
     checkStatus(id) {
         axios.get("/friends/friendstatus/" + id)
         .then(({data}) => {
-            console.log(data, "huhhhh");
             this.setState({
                 status: data.friendRequestStatus,
                 initiator: data.friendRequestInitiator
@@ -52,7 +51,6 @@ export default class FriendButton extends React.Component {
                     id: this.props.user.id
                 })
                 .then(({data}) => {
-                    console.log(data)
                     this.setState({
                         status: data.friendRequestStatus,
                         initiator: data.friendRequestInitiator

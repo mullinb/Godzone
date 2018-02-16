@@ -192,9 +192,9 @@ app.post('/register', user.checkRegister, (req, res) => {
                 id: results.rows[0].id
             }
             res.json({
-                success: true,
-                results: results.rows[0]
+                success: true
             })
+            io.sockets.emit('addToAllUsers', results.rows[0])
         }
         else {}
     })
@@ -223,8 +223,9 @@ app.post('/PPupload', uploader.single('file'), function(req, res) {
                     results.rows[0].pic_url = config.s3Url.concat(results.rows[0].pic_url);
                     res.json({
                         success: true,
-                        user: results.rows[0]
+                        imgUrl: results.rows[0].pic_url
                     });
+                    io.sockets.emit('updateOnAllUsers', results.rows[0])
                 })
                 .catch((err) => {
                     console.log(err);

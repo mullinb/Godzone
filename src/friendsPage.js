@@ -28,7 +28,6 @@ class FriendsPage extends React.Component {
         this.props.getFriends()
     }
     render() {
-        console.log(this.props.friends, this.props.requests)
         return(
             <div>
                 <div>

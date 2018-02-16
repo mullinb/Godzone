@@ -21,7 +21,11 @@ body {
 }
 
 .leftchat {
-    grid-column: 0;
+    grid-column: 1;
+}
+
+.chatlist {
+    grid-column: 2;
 }
 
 .chatbox {
@@ -29,24 +33,49 @@ body {
     border: black 2px solid;
     margin: 10px;
     width: 95%;
-    height: 95%;
+    height: 400px;
+    overflow-y: scroll;
+    display: flex;
+    flex-flow: column;
 }
 
-.chatlist {
-    grid-column: 2;
+.messageline {
+    border-top: 1px black solid;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.otherChatUserPic {
+    order: 1;
+    height: 25px;
+    width: 25px;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+
+.textspan {
+    order: 2;
+    flex-grow: 1;
+    margin: 10px;
+    margin-left: 5px;
+    padding-left: 5px;
+    width: 50%;
+    border-left: 1px black dotted;
+}
+
+.userinfo {
+    order: 3;
+    min-height: 50px;
 }
 
 .chatUserPic {
-    display: inline;
+    display: flex;
     height: 50px;
     width: 50px;
 }
 
-.otherChatUserPic {
-    display: inline;
-    height: 20px;
-    width: 20px;
-}
+
 
 .link {
     color: blue;
