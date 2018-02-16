@@ -1,3 +1,4 @@
+require('./build')
 const express = require('express');
 const app = express();
 const compression = require('compression');
@@ -17,6 +18,7 @@ const io = require('socket.io')(server);
 require('./routes/io')(io);
 var sslRedirect = require('heroku-ssl-redirect');
 var secure = require('express-force-https');
+
 
 app.use(sslRedirect());
 
