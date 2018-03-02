@@ -20,7 +20,7 @@ A small bug seems to plague the chat room page (available <a href="https://godzo
 <img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone2.PNG" width=700>
 </div>
 
-That the “Godly Zone For Gods” is hideously ugly and features nigh-nonsensical language (including some mixing of different tongues) is deliberate, and meant to be humorous. I have no idea why anyone would want to get into the social network business as a solo developer, but this project is at least unique in its exaggeratedly cynical attitude. It was a minor hit in school, as several of my classmates found joy chatting on something a little less hip and zeitgeisty than Slack. Please enjoy it on <a href="https://godzone.herokuapp.com/">Heroku</a>. PM me on LinkedIn or whatever if you want a live demonstration of its <a href="https://godzone.herokuapp.com/chat">chat room</a>.
+That the “Godly Zone For Gods” is hideously ugly and features nigh on nonsensical language (including some mixing of different tongues) is deliberate, and meant to be humorous. I have no idea why anyone would want to get into the social network business as a solo developer, but this project is at least unique in its exaggeratedly cynical attitude. It was a minor hit in school, as several of my classmates found joy chatting on something a little less hip and zeitgeisty than Slack. Please enjoy it on <a href="https://godzone.herokuapp.com/">Heroku</a>. PM me on LinkedIn or whatever if you want a live demonstration of its <a href="https://godzone.herokuapp.com/chat">chat room</a>.
 
 # Technologies
 
