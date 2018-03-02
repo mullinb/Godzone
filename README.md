@@ -2,7 +2,7 @@
 
 <h3>The penultimate project at Spiced is a social network SPA primarily using React, Redux, and socket.io technologies.</h3>
 
-<img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone.PNG" width=700>
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone.PNG" width=700 align="center">
 
  My completed project features registration and login using bcrypt for password encryption, allows users to update profile picture and biography, see who else is logged in, make and accept or reject friend requests, and make use of a real-time chatroom which keeps live track of who is actively chatting.
 
