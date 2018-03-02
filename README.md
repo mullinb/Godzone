@@ -21,6 +21,7 @@ That the “Godly Zone For Gods” is hideously ugly and features nigh-nonsensic
 <ul>
   <li> React </li>
   <li> Redux </li>
+  <li> Redux DevTools </li>
   <li> socket.io </li>
   <li> SASS (minor implementation, obviously) </li>
   <li> Node.js </li>
