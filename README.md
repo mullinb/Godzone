@@ -1,6 +1,6 @@
 # <a href="godzone.herokuapp.com">Godly Zone For Gods</a>
 
-<h3>The penultimate project at Spiced is a social network SPA primarily using React, Redux, and socket.io technologies.</h3>
+<h3>The penultimate project at SPICED is a social network SPA primarily using React, Redux, and socket.io technologies.</h3>
 
 <div align ="center">
 <img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone.PNG" width=700>
