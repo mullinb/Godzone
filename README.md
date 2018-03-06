@@ -33,5 +33,6 @@ That the “Godly Zone For Gods” is hideously ugly and features nigh on nonsen
   <li> Node.js </li>
   <li> Express.js </li>
   <li> PostGreSQL </li>
+ <li> Amazon Web Services S3 </li>
   <li> Heroku </li>
 </ul>
