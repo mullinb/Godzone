@@ -22,7 +22,7 @@ A small bug plagues the chat room page (available <a href="https://godzone.herok
 
 That the “Godly Zone For Gods” is hideously ugly and features nigh on nonsensical language (including some mixing of different tongues) is deliberate, and meant to be humorous. I have no idea why anyone would want to get into the social network business as a solo developer, but this project is at least unique in its exaggeratedly cynical attitude. It was a minor hit in school, as several of my classmates found joy chatting on something a little less hip and zeitgeisty than Slack. Please enjoy it on <a href="https://godzone.herokuapp.com/">Heroku</a>. PM me on <a href="https://www.linkedin.com/in/brianemullin/">LinkedIn</a> or <a href="https://www.facebook.com/mullin.mm">whatever</a> if you want a live demonstration of its <a href="https://godzone.herokuapp.com/chat">chat room</a>.
 
-# Technologies
+## Technologies
 
 <ul>
   <li> React </li>
