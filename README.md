@@ -31,7 +31,7 @@ That the “Godly Zone For Gods” is hideously ugly and features nigh on nonsen
   <li> socket.io </li>
   <li> SASS (minor implementation, obviously) </li>
   <li> Node.js </li>
-  <li> Express.js </li>
+  <li> express.js </li>
   <li> PostGreSQL </li>
  <li> Amazon Web Services S3 </li>
   <li> Heroku </li>
