@@ -100,13 +100,15 @@ module.exports = function(io) {
                     io.sockets.sockets[socket.id].emit('populateAllUsers', results.rows)
                 })
                 .catch(err => console.log(err))
+
+                friends.getChatMessages()
+                .then((results) => {
+                    io.sockets.sockets[socket.id].emit('chatMessages', results.rows)
+                })
             }
         })
 
-        friends.getChatMessages()
-        .then((results) => {
-            io.sockets.sockets[socket.id].emit('chatMessages', results.rows)
-        })
+
 
         socket.on('sendMessage', (message) => {
             friends.logChat(message, userId)
