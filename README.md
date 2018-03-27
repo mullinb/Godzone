@@ -1,9 +1,38 @@
-# Using this repo in development
+# <a href="godzone.herokuapp.com">Godly Zone For Gods</a>
 
-The `src` directory is where all of your client-side Javascript code should live. The file `src/start.js` is the entry point for your React application. All other files you use will either be imported by `start.js` or imported by files that are imported `start.js` (or imported by files that are imported by files that are imported by `start.js`, etc.).
+<h3>The penultimate project at SPICED is a social network SPA primarily using React, Redux, and socket.io technologies.</h3>
 
-To run your app in devlopment, you need to start two servers.
+<div align ="center">
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone.PNG" width=700>
+</div>
 
-1. `bundle-server.js` - this server will listen on port 8081 and does nothing but compile the code in `src/start.js` and its dependencies into a single bundle which it serves from the url `/bundle.js`. It uses [`webpack-dev-middleware`](https://github.com/webpack/webpack-dev-middleware) to do this. This middleware keeps all the compiled files in memory and doesn't ever write a file to disk. Every time you edit one of the files in your bundle, it detects the change and automatically recompiles. Thus, you do not have to restart this process every time you make a change to one of your client-side Javascript files. After a change is saved, the updated `/bundle.js` will be available automatically.
+ My completed project features registration and login using bcrypt for password encryption, allows users to update profile picture and biography, see who else is logged in, make and accept or reject friend requests, and make use of a real-time chatroom which keeps live track of who is actively chatting.
 
-2. `index.js` - this server listens on port 8080 and it is where all your normal express stuff should go. When `index.js` is running in development, requests for `/bundle.js` will cause a request to be made to `http://localhost:8081/bundle.js` and the result served (it uses the [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware) to do this). You can restart this server every time you make a server-side change and not have to wait for `bundle.js` to recompile before you can test the change.
+As this product was meant to develop our familiarity with both React and Redux, I did my best to make as effective usage of these tools' advantages as I could. I have componentized every part of the app for React (reusing where I could), and did my best to construct a Redux reducer that is as readable as possible. React Router manages most of the routing on the page, ensuring a stable user experience.
+
+<div align ="center">
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone3.PNG" width=700>
+</div>
+
+A small bug plagues the chat room page (available <a href="https://godzone.herokuapp.com/chat">here</a> once the user is logged in) that sometimes requires a reload when first arriving at the page to resolve. Redux keeps track of the list of both online users and in-chat users on the client-side (receiving updates from the server via socket.io whenever the list of users changes), and the relevant components use this state information to determine what to display. 
+
+<div align ="center">
+<img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone2.PNG" width=700>
+</div>
+
+That the “Godly Zone For Gods” is hideously ugly and features nigh on nonsensical language (including some mixing of different tongues) is deliberate, and meant to be humorous. I have no idea why anyone would want to get into the social network business as a solo developer, but this project is at least unique in its exaggeratedly cynical attitude. It was a minor hit in school, as several of my classmates found joy chatting on something a little less hip and zeitgeisty than Slack. Please enjoy it on <a href="https://godzone.herokuapp.com/">Heroku</a>. PM me on <a href="https://www.linkedin.com/in/brianemullin/">LinkedIn</a> or <a href="https://www.facebook.com/mullin.mm">whatever</a> if you want a live demonstration of its <a href="https://godzone.herokuapp.com/chat">chat room</a>.
+
+## Technologies
+
+<ul>
+  <li> React </li>
+  <li> Redux </li>
+  <li> Redux DevTools </li>
+  <li> socket.io </li>
+  <li> SASS (minor implementation, obviously) </li>
+  <li> Node.js </li>
+  <li> express.js </li>
+  <li> PostGreSQL </li>
+ <li> Amazon Web Services S3 </li>
+  <li> Heroku </li>
+</ul>
