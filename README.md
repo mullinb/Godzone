@@ -14,7 +14,7 @@ As this product was meant to develop our familiarity with both React and Redux, 
 <img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone3.PNG" width=700>
 </div>
 
-The website features a chat-room, which the user can visit directly<a href="https://godzone.herokuapp.com/chat">here</a> once they are logged in. Redux keeps track of the list of both online users and in-chat users on the client-side (receiving updates from the server via socket.io whenever the list of users changes), and the relevant components use this state information to determine what to display. 
+The website features a chat-room, which the user can visit directly <a href="https://godzone.herokuapp.com/chat">here</a> once they are logged in. Redux keeps track of the list of both online users and in-chat users on the client-side (receiving updates from the server via socket.io whenever the list of users changes), and the relevant components use this state information to determine what to display. 
 
 <div align ="center">
 <img src="https://s3.amazonaws.com/fluxlymoppings/pics/GodlyZone2.PNG" width=700>
